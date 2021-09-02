@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="bookInfo"
+            type="com.example.mybooklist.network.BookInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp">
+
+        <ImageView
+            android:id="@+id/item_book_thumbnail"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{bookInfo.thumbnail}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="#123123" />
+
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/item_book_thumbnail"
+            app:layout_constraintLeft_toRightOf="@id/item_book_thumbnail"
+
+            app:layout_constraintTop_toTopOf="@+id/item_book_thumbnail">
+
+            <TextView
+                android:id="@+id/item_book_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{bookInfo.title}"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="123" />
+
+            <TextView
+                android:id="@+id/item_book_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{bookInfo.status}"
+                tools:text="TextView" />
+
+            <TextView
+                android:id="@+id/item_book_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{bookInfo.contents}"
+                tools:text="TextViewTextViewTextViewTextViewTextView" />
+        </LinearLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

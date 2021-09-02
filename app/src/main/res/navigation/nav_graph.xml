@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/booklistFragment"
+    android:id="@+id/nav_graph" >
+
+    <fragment
+        android:id="@+id/booklistFragment"
+        android:name="com.example.mybooklist.booklist.BookListFragment"
+        android:label="@string/my_app_name"
+        tools:layout="@layout/fragment_booklist">
+        <action
+            android:id="@+id/action_showDetail"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.mybooklist.detail.DetailFragment"
+        android:label="@string/my_app_name"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="selectedBook"
+            app:argType="com.example.mybooklist.network.BookInfo"/>
+    </fragment>
+</navigation>
