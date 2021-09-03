@@ -10,7 +10,6 @@ import com.example.mybooklist.databinding.FragmentDetailBinding
 
 class DetailFragment:Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,22 +19,20 @@ class DetailFragment:Fragment() {
         @Suppress("UNUSED_VARIABLE")
         val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
 
         val bookInfo = DetailFragmentArgs.fromBundle(requireArguments()).selectedBook
         val viewModelFactory = DetailViewModelFactory(bookInfo, application)
 
-        binding.viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
+        //viewModel.setBookInfo(bookInfo)
+        binding.viewModel = viewModel
+        
+
 
         return binding.root
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(android.R.id.home)
-//        return super.onOptionsItemSelected(item)
-//    }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
 }

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="140dp">
 
+
         <ImageView
             android:id="@+id/item_book_thumbnail"
             android:layout_width="100dp"

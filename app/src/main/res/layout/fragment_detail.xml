@@ -60,10 +60,19 @@
                 tools:text="MY_TITLE"/>
 
             <TextView
+                android:id="@+id/detail_publisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.selectedBook.publisher}"
+                app:layout_constraintTop_toBottomOf="@id/detail_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                tools:text="15000"/>
+
+            <TextView
                 android:id="@+id/detail_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/detail_title"
+                app:layout_constraintTop_toBottomOf="@id/detail_publisher"
                 android:layout_marginTop="8dp"
                 android:text="@{viewModel.selectedBook.contents}"
                 tools:text="MY_CONTENT_MY_CONTENT_MY_CONTENT_MY_CONTENT_MY_CONTENT"/>

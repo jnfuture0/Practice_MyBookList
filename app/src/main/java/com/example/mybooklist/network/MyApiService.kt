@@ -25,14 +25,14 @@ private val retrofit = Retrofit.Builder()
 
 
 interface MyApiService{
-
-
     @GET("v3/search/book")
-    fun getBooksInfo(
+    suspend fun getBooksInfo(
         @Header("Authorization") authorization:String,
         @Query("query") query:String,
-        @Query("target") target:String = "title"
-    ): Deferred<MyBooksInfo>
+        @Query("page") page:Int,
+        @Query("target") target:String = "title",
+        @Query("sort") sort:String = "accuracy"
+    ): MyBooksInfo
 
 }
 
@@ -40,4 +40,5 @@ object MyApi{
     val retrofitService : MyApiService by lazy{
         retrofit.create(MyApiService::class.java)
     }
+
 }
