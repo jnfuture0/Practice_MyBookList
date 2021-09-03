@@ -43,8 +43,7 @@ class BooksRepository(private val database:BooksDatabase) {
         withContext(Dispatchers.IO){
             try{
                 _status.postValue(MyApiStatus.LOADING)
-                val getBooksInfo = MyApi.retrofitService.getBooksInfo(authorization, query, 1)
-                val listResult = getBooksInfo
+                val listResult = MyApi.retrofitService.getBooksInfo(authorization, query, 1)
                 _isError.postValue(false)
 
                 //for getMoreBooks
@@ -58,13 +57,14 @@ class BooksRepository(private val database:BooksDatabase) {
                 withContext(Dispatchers.Main) {
                     _booksInfo.value = listResult.documents
                 }
+                _status.postValue(MyApiStatus.DONE)
 
                 _booksInfo.postValue(listResult.documents)
             }catch (e:Throwable){
                 _isError.postValue(true)
                 val databaseBooksInfo = database.bookDao.getBooks().asDomainModel()
                 _booksInfo.postValue(databaseBooksInfo)
-            }finally {
+                Log.e("BooksRepository", e.message.toString())
                 _status.postValue(MyApiStatus.DONE)
             }
         }
@@ -74,11 +74,9 @@ class BooksRepository(private val database:BooksDatabase) {
         if(!_isEnd && _page<=49){
             _page += 1
             withContext(Dispatchers.IO){
-                val getBooksInfo = MyApi.retrofitService.getBooksInfo(authorization, _query, _page)
-
                 try{
                     _status.postValue(MyApiStatus.LOADING)
-                    val listResult = getBooksInfo
+                    val listResult = MyApi.retrofitService.getBooksInfo(authorization, _query, _page)
                     _status.postValue(MyApiStatus.DONE)
                     _isError.postValue(false)
 
