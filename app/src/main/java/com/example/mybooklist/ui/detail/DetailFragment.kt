@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import com.example.mybooklist.databinding.FragmentDetailBinding
 
@@ -29,14 +27,7 @@ class DetailFragment : Fragment() {
         val binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-//        val bookInfo = DetailFragmentArgs.fromBundle(requireArguments()).selectedBook
-//        val viewModelFactory = DetailViewModelFactory(bookInfo)
-
-        //val viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
-        //viewModel.setBookInfo(bookInfo)
         binding.viewModel = viewModel
-
 
         return binding.root
     }

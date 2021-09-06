@@ -38,7 +38,7 @@ fun DatabaseBookEntity.asDomainModel(): BookInfoDomain {
     )
 }
 
-fun List<DatabaseBookEntity>.asDomainModel(): List<BookInfoDomain> {
+fun List<DatabaseBookEntity>.asDomainList(): List<BookInfoDomain> {
     return map {
         it.asDomainModel()
     }

@@ -7,15 +7,12 @@ import com.example.mybooklist.domain.model.BookInfoDomain
 
 class DetailViewModel(bookInfo: BookInfoDomain) : ViewModel() {
 
-    //private var bookInfo: BookInfo ?= null
     private val _selectedBook = MutableLiveData<BookInfoDomain>()
     val selectedBook: LiveData<BookInfoDomain>
         get() = _selectedBook
 
     init {
         _selectedBook.value = bookInfo
-
-
     }
 
 

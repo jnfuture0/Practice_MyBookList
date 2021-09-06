@@ -1,12 +1,10 @@
 package com.example.mybooklist.repository
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mybooklist.datasource.database.dao.BookDao
-import com.example.mybooklist.datasource.database.entity.asDomainModel
-import com.example.mybooklist.datasource.network.*
+import com.example.mybooklist.datasource.database.entity.asDomainList
+import com.example.mybooklist.datasource.network.MyApiService
 import com.example.mybooklist.datasource.network.dto.asDatabaseModel
 import com.example.mybooklist.datasource.network.dto.asDomainList
 import com.example.mybooklist.domain.model.BookInfoDomain
@@ -18,7 +16,6 @@ import javax.inject.Inject
 class BooksRepository
 @Inject
 constructor(
-  //  private val context: Context,
     private val provideApiService: MyApiService,
     private val provideBookDao: BookDao
 ) {
@@ -48,32 +45,27 @@ constructor(
 
 
     suspend fun setBooksList(query: String) {
-        withContext(Dispatchers.IO) {
-            try {
-                _status.postValue(MyApiStatus.LOADING)
-                //val listResult = MyApi.retrofitService.getBooksInfo(authorization, query, 1)
-                val listResult = provideApiService.getBooksInfo(authorization, query, 1)
-                _isError.postValue(false)
+        try {
+            _status.value = MyApiStatus.LOADING
+            val listResult = provideApiService.getBooksInfo(authorization, query, 1)
+            _isError.value = false
 
-                //for getMoreBooks
-                _query = query
-                _isEnd = listResult.meta.is_end
-                _page = 1
+            //for getMoreBooks
+            _query = query
+            _isEnd = listResult.meta.is_end
+            _page = 1
 
+            withContext(Dispatchers.IO) {
                 provideBookDao.deleteAll()
                 provideBookDao.insertAll(*listResult.asDatabaseModel()) //exception?
-
-                withContext(Dispatchers.Main) {
-                    _booksInfo.value = listResult.documents.asDomainList()
-                }
-                _status.postValue(MyApiStatus.DONE)
-
-                _booksInfo.postValue(listResult.documents.asDomainList())
-            } catch (e: Throwable) {
-                _isError.postValue(true)
-                val databaseBooksInfo = provideBookDao.getBooks().asDomainModel()
+            }
+            _booksInfo.value = listResult.documents.asDomainList()
+            _status.value = MyApiStatus.DONE
+        } catch (e: Throwable) {
+            _isError.value = true
+            withContext(Dispatchers.IO) {
+                val databaseBooksInfo = provideBookDao.getBooks().asDomainList()
                 _booksInfo.postValue(databaseBooksInfo)
-                Log.e("BooksRepository", e.message.toString())
                 _status.postValue(MyApiStatus.DONE)
             }
         }
@@ -82,23 +74,23 @@ constructor(
     suspend fun getMoreBooks() {
         if (!_isEnd && _page <= 49) {
             _page += 1
-            withContext(Dispatchers.IO) {
-                try {
-                    _status.postValue(MyApiStatus.LOADING)
-                    //val listResult = MyApi.retrofitService.getBooksInfo(authorization, _query, _page)
-                    val listResult = provideApiService.getBooksInfo(authorization, _query, _page)
-                    _status.postValue(MyApiStatus.DONE)
-                    _isError.postValue(false)
+            try {
+                _status.value = MyApiStatus.LOADING
+                val listResult = provideApiService.getBooksInfo(authorization, _query, _page)
 
-                    _isEnd = listResult.meta.is_end
+                _status.value = MyApiStatus.DONE
+                _isError.value = false
 
+                _isEnd = listResult.meta.is_end
+
+                withContext(Dispatchers.IO) {
                     provideBookDao.insertAll(*listResult.asDatabaseModel())
-                    val databaseBooksInfo = provideBookDao.getBooks().asDomainModel()
+                    val databaseBooksInfo = provideBookDao.getBooks().asDomainList()
                     _booksInfo.postValue(databaseBooksInfo)
-                } catch (e: Throwable) {
-                    _isError.postValue(true)
-                    _status.postValue(MyApiStatus.DONE)
                 }
+            } catch (e: Throwable) {
+                _isError.postValue(true)
+                _status.postValue(MyApiStatus.DONE)
             }
         }
     }

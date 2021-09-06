@@ -10,8 +10,8 @@ data class MyBooksInfoDto(
 )
 
 
-fun MyBooksInfoDto.asDatabaseModel(): Array<DatabaseBookEntity>{
-    return documents.map{
+fun MyBooksInfoDto.asDatabaseModel(): Array<DatabaseBookEntity> {
+    return documents.map {
         DatabaseBookEntity(
             title = it.title,
             contents = it.contents,
