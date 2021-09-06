@@ -1,4 +1,4 @@
-package com.example.mybooklist.booklist
+package com.example.mybooklist.ui.booklist
 
 import android.graphics.Rect
 import android.view.View

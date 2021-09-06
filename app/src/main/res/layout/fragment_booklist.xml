@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.mybooklist.booklist.BookListViewModel" />
+            type="com.example.mybooklist.ui.booklist.BookListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.mybooklist.MainActivity">
+        tools:context="com.example.mybooklist.ui.MainActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/books_toolbar"

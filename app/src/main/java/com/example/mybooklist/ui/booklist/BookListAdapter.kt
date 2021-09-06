@@ -1,41 +1,39 @@
-package com.example.mybooklist.booklist
+package com.example.mybooklist.ui.booklist
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooklist.bindRecyclerView
 import com.example.mybooklist.databinding.RecyclerviewItemBinding
-import com.example.mybooklist.network.BookInfo
+import com.example.mybooklist.domain.model.BookInfoDomain
 
-class BookListAdapter(val onClickListener: OnClickListener):
-    ListAdapter<BookInfo, BookListAdapter.BookListViewHolder>(DiffCallback){
+class BookListAdapter(private val onClickListener: OnClickListener) :
+    ListAdapter<BookInfoDomain, BookListAdapter.BookListViewHolder>(DiffCallback) {
 
     private lateinit var mRecyclerView: RecyclerView
     var mItemCount = -1
 
-    class BookListViewHolder(private var binding:RecyclerviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(bookInfo:BookInfo){
+    class BookListViewHolder(private var binding: RecyclerviewItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(bookInfo: BookInfoDomain) {
             binding.bookInfo = bookInfo
             binding.executePendingBindings()
         }
     }
 
-    companion object DiffCallback: DiffUtil.ItemCallback<BookInfo>(){
-        override fun areItemsTheSame(oldItem: BookInfo, newItem: BookInfo): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<BookInfoDomain>() {
+        override fun areItemsTheSame(oldItem: BookInfoDomain, newItem: BookInfoDomain): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: BookInfo, newItem: BookInfo): Boolean {
+        override fun areContentsTheSame(oldItem: BookInfoDomain, newItem: BookInfoDomain): Boolean {
             return oldItem.title == newItem.title
         }
     }
 
     override fun getItemCount(): Int {
-        if(mItemCount != super.getItemCount()) {
+        if (mItemCount != super.getItemCount()) {
             mItemCount = super.getItemCount()
             if (mItemCount % 10 == 0) {
                 when (mItemCount) {
@@ -71,8 +69,8 @@ class BookListAdapter(val onClickListener: OnClickListener):
         holder.bind(bookInfo)
     }
 
-    class OnClickListener(val clickListener: (bookInfo:BookInfo) -> Unit){
-        fun onClick(bookInfo:BookInfo) = clickListener(bookInfo)
+    class OnClickListener(val clickListener: (bookInfo: BookInfoDomain) -> Unit) {
+        fun onClick(bookInfo: BookInfoDomain) = clickListener(bookInfo)
     }
 
 }

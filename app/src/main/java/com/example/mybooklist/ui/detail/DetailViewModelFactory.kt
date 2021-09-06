@@ -14,21 +14,19 @@
  *  limitations under the License.
  */
 
-package com.example.mybooklist.detail
+package com.example.mybooklist.ui.detail
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mybooklist.network.BookInfo
+import com.example.mybooklist.domain.model.BookInfoDomain
 
 
 class DetailViewModelFactory(
-    private val bookInfo: BookInfo,
-    private val application: Application) : ViewModelProvider.Factory {
+    private val bookInfo: BookInfoDomain,) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            return DetailViewModel(bookInfo, application) as T
+            return DetailViewModel(bookInfo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

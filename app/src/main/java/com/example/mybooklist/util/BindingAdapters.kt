@@ -15,7 +15,7 @@
  *
  */
 
-package com.example.mybooklist
+package com.example.mybooklist.util
 
 import android.view.View
 import android.widget.ImageView
@@ -24,25 +24,28 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.mybooklist.booklist.BookListAdapter
-import com.example.mybooklist.booklist.MyApiStatus
-import com.example.mybooklist.network.BookInfo
+import com.example.mybooklist.R
+import com.example.mybooklist.domain.model.BookInfoDomain
+import com.example.mybooklist.ui.booklist.BookListAdapter
+import com.example.mybooklist.ui.booklist.MyApiStatus
 
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView:RecyclerView, data:List<BookInfo>?){
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<BookInfoDomain>?) {
     val adapter = recyclerView.adapter as BookListAdapter
     adapter.submitList(data)
 }
 
 @BindingAdapter("imageUrl")
-fun bindImage(imgView:ImageView, imgUrl:String?){
-    imgUrl?.let{
+fun bindImage(imgView: ImageView, imgUrl: String?) {
+    imgUrl?.let {
         val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(imgView.context)
             .load(imgUri)
-            .apply(RequestOptions()
-                .placeholder((R.drawable.loading_animation))
-                .error((R.drawable.ic_broken_image)))
+            .apply(
+                RequestOptions()
+                    .placeholder((R.drawable.loading_animation))
+                    .error((R.drawable.ic_broken_image))
+            )
             .into(imgView)
     }
 }

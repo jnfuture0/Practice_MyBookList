@@ -1,24 +1,24 @@
-package com.example.mybooklist.booklist
+package com.example.mybooklist.ui.booklist
 
-import android.app.Application
-import androidx.lifecycle.*
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooklist.database.getDatabase
-import com.example.mybooklist.network.BookInfo
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.mybooklist.domain.model.BookInfoDomain
 import com.example.mybooklist.repository.BooksRepository
-import kotlinx.coroutines.*
-import java.lang.IllegalStateException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 enum class MyApiStatus { LOADING, ERROR, DONE }
 
-class BookListViewModel(application:Application) : AndroidViewModel(application) {
- //   private val coroutineScope = CoroutineScope(Dispatchers.IO + CoroutineName("Hello"))
+@HiltViewModel
+class BookListViewModel
+@Inject
+constructor(private val booksRepository: BooksRepository) : ViewModel() {
 
-    private val database = getDatabase(application)
-    private val booksRepository = BooksRepository(database)
-
-    private val _navigateToSelectedBook = MutableLiveData<BookInfo>()
-    val navigateToSelectedBook : LiveData<BookInfo>
+    private val _navigateToSelectedBook = MutableLiveData<BookInfoDomain>()
+    val navigateToSelectedBook: LiveData<BookInfoDomain>
         get() = _navigateToSelectedBook
 
     init {
@@ -31,10 +31,24 @@ class BookListViewModel(application:Application) : AndroidViewModel(application)
     val status = booksRepository.status
     val isError = booksRepository.isError
 
-    fun searchWithQuery(query:String){
+    fun searchWithQuery(query: String) {
         viewModelScope.launch {
             booksRepository.setBooksList(query)
         }
+    }
+
+    fun getMoreBooks() {
+        viewModelScope.launch {
+            booksRepository.getMoreBooks()
+        }
+    }
+
+    fun displayBookDetails(bookInfo: BookInfoDomain) {
+        _navigateToSelectedBook.value = bookInfo
+    }
+
+    fun displayBookDetailsComplete() {
+        _navigateToSelectedBook.value = null
     }
 
 //    private var job: Job?=null
@@ -124,18 +138,5 @@ class BookListViewModel(application:Application) : AndroidViewModel(application)
 //       // coroutineScope.coroutineContext.cancel()
 //    }
 
-    fun getMoreBooks(){
-        viewModelScope.launch {
-            booksRepository.getMoreBooks()
-        }
-    }
 
-
-    fun displayBookDetails(bookInfo:BookInfo){
-        _navigateToSelectedBook.value = bookInfo
-    }
-
-    fun displayBookDetailsComplete(){
-        _navigateToSelectedBook.value = null
-    }
 }

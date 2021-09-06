@@ -1,15 +1,16 @@
-package com.example.mybooklist
+package com.example.mybooklist.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.example.mybooklist.booklist.BookListViewModel
+import com.example.mybooklist.R
 import com.example.mybooklist.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val navController by lazy { findNavController(R.id.nav_host_fragment) }
 

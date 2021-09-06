@@ -1,40 +1,38 @@
-package com.example.mybooklist.booklist
+package com.example.mybooklist.ui.booklist
 
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooklist.MainActivity
 import com.example.mybooklist.R
 import com.example.mybooklist.databinding.FragmentBooklistBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class BookListFragment : Fragment() {
+
+    private val viewModel by viewModels<BookListViewModel>()
+
+    private lateinit var moveOutAnim: Animation
+    private lateinit var moveInAnim: Animation
 
 
-class BookListFragment:Fragment() {
-
-    private val viewModel:BookListViewModel by lazy {
-        ViewModelProvider(this).get(BookListViewModel::class.java)
-    }
-
-    lateinit var moveOutAnim:Animation
-    lateinit var moveInAnim:Animation
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentBooklistBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -43,21 +41,21 @@ class BookListFragment:Fragment() {
 
         moveInAnim = AnimationUtils.loadAnimation(context, R.anim.move_bottom_up)
         moveOutAnim = AnimationUtils.loadAnimation(context, R.anim.move_bottom_down)
-        viewModel.isError.observe(viewLifecycleOwner, Observer {
-            if (it){
-                if(binding.booksErrorTextview.visibility != View.VISIBLE){
+        viewModel.isError.observe(viewLifecycleOwner) {
+            if (it) {
+                if (binding.booksErrorTextview.visibility != View.VISIBLE) {
                     binding.booksErrorTextview.visibility = View.VISIBLE
                     binding.booksErrorTextview.startAnimation(moveInAnim)
                 }
-            }else{
-                if(binding.booksErrorTextview.visibility != View.GONE) {
+            } else {
+                if (binding.booksErrorTextview.visibility != View.GONE) {
                     binding.booksErrorTextview.startAnimation(moveOutAnim)
                     binding.booksErrorTextview.visibility = View.GONE
                 }
             }
-        })
+        }
         viewModel.navigateToSelectedBook.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 this.findNavController().navigate(BookListFragmentDirections.actionShowDetail(it))
                 viewModel.displayBookDetailsComplete()
             }
@@ -73,17 +71,17 @@ class BookListFragment:Fragment() {
     }
 
 
-    private fun setRecyclerView(recyclerView: RecyclerView){
+    private fun setRecyclerView(recyclerView: RecyclerView) {
         val mDividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        recyclerView.adapter = BookListAdapter(BookListAdapter.OnClickListener{
+        recyclerView.adapter = BookListAdapter(BookListAdapter.OnClickListener {
             viewModel.displayBookDetails(it)
         })
         recyclerView.addItemDecoration(mDividerItemDecoration)
         recyclerView.addItemDecoration(VerticalItemDecorator(40))
-        recyclerView.addOnScrollListener(object:RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if(!recyclerView.canScrollVertically(1)){
+                if (!recyclerView.canScrollVertically(1)) {
                     viewModel.getMoreBooks()
                 }
             }
@@ -93,11 +91,12 @@ class BookListFragment:Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.options_menu, menu)
 
-        val queryTextListener = object:SearchView.OnQueryTextListener{
+        val queryTextListener = object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.searchWithQuery(query)
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return true
             }
