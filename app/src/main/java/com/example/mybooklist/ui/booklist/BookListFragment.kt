@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mybooklist.R
 import com.example.mybooklist.databinding.FragmentBooklistBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,15 +44,7 @@ class BookListFragment : Fragment() {
         moveOutAnim = AnimationUtils.loadAnimation(context, R.anim.move_bottom_down)
         viewModel.isError.observe(viewLifecycleOwner) {
             if (it) {
-                if (binding.booksErrorTextview.visibility != View.VISIBLE) {
-                    binding.booksErrorTextview.visibility = View.VISIBLE
-                    binding.booksErrorTextview.startAnimation(moveInAnim)
-                }
-            } else {
-                if (binding.booksErrorTextview.visibility != View.GONE) {
-                    binding.booksErrorTextview.startAnimation(moveOutAnim)
-                    binding.booksErrorTextview.visibility = View.GONE
-                }
+                Snackbar.make(binding.booksConstraintLayout, R.string.error_message, Snackbar.LENGTH_SHORT).show()
             }
         }
         viewModel.navigateToSelectedBook.observe(viewLifecycleOwner, Observer {

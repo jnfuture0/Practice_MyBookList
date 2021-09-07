@@ -9,45 +9,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/books_constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.mybooklist.ui.MainActivity">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/books_toolbar"
-            android:visibility="gone"
-            android:background="#feeae6"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:id="@+id/books_toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:text="@string/app_name"/>
-
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/books_searchView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/books_recyclerView"
@@ -59,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/books_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:listData="@{viewModel.booksInfo}"
             tools:listitem="@layout/recyclerview_item" />
 
@@ -76,17 +41,7 @@
             tools:visibility="visible"
             app:myApiStatus="@{viewModel.status}" />
 
-        <TextView
-            android:id="@+id/books_error_textview"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/design_default_color_primary_dark"
-            android:textColor="@color/white"
-            android:text="@string/error_message"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"/>
+
 
 <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--            android:layout_width="wrap_content"-->

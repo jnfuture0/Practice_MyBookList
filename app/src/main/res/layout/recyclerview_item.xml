@@ -46,7 +46,8 @@
                 android:text="@{bookInfo.title}"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="123" />
+                tools:fontFamily="@font/abeezee"
+                tools:text="오 자하르 abc" />
 
             <TextView
                 android:id="@+id/item_book_status"
